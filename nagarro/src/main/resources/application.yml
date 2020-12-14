@@ -1,0 +1,60 @@
+#database:
+#  location: E:\\db\\accountsdb.accdb
+
+server:
+  port: 8080
+
+spring:
+  jackson:
+    mapper:
+      DEFAULT_VIEW_INCLUSION: true
+    serialization:
+      indent_output: true
+      WRITE_DATES_AS_TIMESTAMPS: false
+    deserialization:
+      FAIL_ON_IGNORED_PROPERTIES: false
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+      ACCEPT_SINGLE_VALUE_AS_ARRAY: true
+    default-property-inclusion: non_empty
+
+
+  datasource:
+    driver: net.ucanaccess.jdbc.UcanaccessDriver
+    url: jdbc:ucanaccess://e:/db/accountsdb.accdb;openExclusive=false;ignoreCase=true
+    #    dialect:org.hibernate.dialect.SQLServerDialect
+    #username: root
+    #password: root
+    cachePrepStmts: true
+    prepStmtCacheSize: 250
+    prepStmtCacheSqlLimit: 2048
+    useServerPrepStmts: true
+
+  #    hibernate.dialect=com.hxtt.support.hibernate.HxttAccessDialect
+  #    hibernate.connection.driver_class=com.hxtt.sql.access.AccessDriver
+  #    hibernate.connection.url=jdbc:access:///e:/db/accountsdb.accdb
+
+  jpa:
+    openInView: false
+    show_sql: true
+    generate-ddl: false
+    #hibernate:
+    #  ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        #dialect: net.ucanaccess.hibernate.dialect.UCanAccessDialect
+        jdbc.lob.non_contextual_creation: true
+
+  data:
+    jpa:
+      repositories.enabled: true
+
+logging:
+  level:
+    org.springframework.web: INFO
+    org.springframework.security: DEBUG
+    com.zainimtiaz: DEBUG
+  file: app.log
+
+#hibenate:
+#  dialect: org.hibernate.dialect.SQLServerDialect
