@@ -76,10 +76,10 @@ public class AuthController {
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
             String token = request.getHeader("Authorization").split(" ")[1];
+
             if (GeneralUtil.isNullorEmpty(token)) {
                 throw new Exception("Token not found");
             }
-//            jwtTokenProvider.invalidateToken(token);
 
             Map<Object, Object> model = new HashMap<>();
             model.put("message", "Logged out successfully");
