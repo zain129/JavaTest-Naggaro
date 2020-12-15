@@ -7,8 +7,10 @@ package com.zainimtiaz.nagarro.controller;
 
 import com.zainimtiaz.nagarro.config.jwt.JwtTokenProvider;
 import com.zainimtiaz.nagarro.dto.AccountStatementDto;
+import com.zainimtiaz.nagarro.dto.StatementDto;
 import com.zainimtiaz.nagarro.service.AccountService;
 import com.zainimtiaz.nagarro.service.CustomUserDetailsService;
+import com.zainimtiaz.nagarro.util.GeneralUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +18,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api")
 @Slf4j
 public class AccountController {
     @Autowired
@@ -36,7 +37,7 @@ public class AccountController {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-    @GetMapping("/statement/{accountId}")
+    @GetMapping("/statement/account/{accountId}")
     public ResponseEntity allData(@PathVariable("accountId") Long accountId) throws Exception {
         AccountStatementDto statement = accountService.getStatementById(accountId);
 

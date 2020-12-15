@@ -29,7 +29,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
@@ -94,6 +93,15 @@ public class AuthController {
     public ResponseEntity expired() throws Exception {
         Map<Object, Object> model = new HashMap<>();
         model.put("message", "Session Expired!");
+        return ok(model);
+    }
+
+    @GetMapping("/403")
+    public ResponseEntity unauthorized() throws Exception {
+        Map<Object, Object> model = new HashMap<>();
+        model.put("error", "Unauthorized");
+        model.put("status", "403");
+        model.put("message", "Access Denied!");
         return ok(model);
     }
 

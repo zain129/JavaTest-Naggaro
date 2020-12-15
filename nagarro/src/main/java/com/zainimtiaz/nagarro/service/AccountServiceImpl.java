@@ -34,7 +34,6 @@ public class AccountServiceImpl implements AccountService {
     private JdbcTemplate jdbcTemplate;
 
     private final String sqlAcountById = "SELECT * FROM ACCOUNT WHERE id = ?";
-    //    private final String sqlStatementByDate = "SELECT * FROM STATEMENT WHERE account_id = ? AND CAST(datefield AS DATETIME) BETWEEN ? AND ?";
     private String sqlStatementByDate = "SELECT s.* FROM STATEMENT s WHERE account_id = ? ";
     //        + " AND (CONVERT(date, \\`datefield\\`, 4) BETWEEN '?' AND '?')";
     private final String sqlStatementByAmount = "SELECT * FROM STATEMENT WHERE account_id = ? "
