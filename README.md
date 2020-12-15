@@ -12,9 +12,6 @@ Dec 16, 2020
 # Login
 curl -X POST http://localhost:8080/auth/login -H "Content-Type:application/json" -d "{\"username\":\"testadmin\", \"password\":\"adminpassword\"}"
 
-# Access API
-curl -X GET http://localhost:8080/thisUser -H "Authorization: Bearer <TOKEN>"
-
 # APIs
 - http://localhost:8080/auth/login
 - http://localhost:8080/auth/logout
@@ -23,7 +20,7 @@ curl -X GET http://localhost:8080/thisUser -H "Authorization: Bearer <TOKEN>"
 - http://localhost:8080/api/account/statement/amount/{accountId}/{amountFrom}/{amountTo}
 - http://localhost:8080/api/account/statement/all/{accountId}/{dateFrom}/{dateTo}/{amountFrom}/{amountTo}
 
-# Sample Calls
+# Sample Calls (Access APIs)
 - curl -X POST http://localhost:8080/auth/login -H "Content-Type:application/json" -d "{\"username\":\"testadmin\", \"password\":\"adminpassword\"}"
 - curl -X GET http://localhost:8080/thisUser -H "Authorization: Bearer [Token]"
 - curl -X GET http://localhost:8080/api/account/statement/1 -H "Authorization: Bearer [Token]"
