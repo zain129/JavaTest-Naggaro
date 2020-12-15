@@ -81,9 +81,10 @@ public class JwtTokenProvider {
     }
 
     public String invalidateToken(String token) {
-        Claims claims = getAllClaimsFromToken(token);
         Date now = new Date();
-        log.info("Time" + now.toString());
+        log.info("Time: " + now.toString());
+
+        Claims claims = getAllClaimsFromToken(token);
         claims.setIssuedAt(now).setNotBefore(now).setExpiration(now);
 
         return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, secretKey).compact();
