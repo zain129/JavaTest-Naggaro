@@ -24,8 +24,8 @@ curl -X GET http://localhost:8080/thisUser -H "Authorization: Bearer <TOKEN>"
 
 # Sample Calls
 1. curl -X POST http://localhost:8080/auth/login -H "Content-Type:application/json" -d "{\"username\":\"testadmin\", \"password\":\"adminpassword\"}"
-2. curl -X GET http://localhost:8080/thisUser -H "Authorization: Bearer <Token>"
-3. curl -X GET http://localhost:8080/api/account/statement/1 -H "Authorization: Bearer <Token>"
-4. curl -X GET http://localhost:8080/api/account/statement/amount/1/100/1000 -H "Authorization: Bearer <Token>"
-5. curl -X GET http://localhost:8080/api/account/statement/date/1/01.07.2012/14.10.2012 -H "Authorization: Bearer <Token>"
-6. curl -X GET http://localhost:8080/api/account/statement/all/1/01.07.2012/14.10.2012/100/1000 -H "Authorization: Bearer <Token>"
+2. curl -X GET http://localhost:8080/thisUser -H "Authorization: Bearer [Token]"
+3. curl -X GET http://localhost:8080/api/account/statement/1 -H "Authorization: Bearer [Token]"
+4. curl -X GET http://localhost:8080/api/account/statement/amount/1/100/1000 -H "Authorization: Bearer [Token]"
+5. curl -X GET http://localhost:8080/api/account/statement/date/1/01.07.2012/14.10.2012 -H "Authorization: Bearer [Token]"
+6. curl -X GET http://localhost:8080/api/account/statement/all/1/01.07.2012/14.10.2012/100/1000 -H "Authorization: Bearer [Token]"
