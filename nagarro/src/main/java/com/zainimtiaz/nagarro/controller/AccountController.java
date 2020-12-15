@@ -5,95 +5,85 @@
 
 package com.zainimtiaz.nagarro.controller;
 
+import com.zainimtiaz.nagarro.config.jwt.JwtTokenProvider;
 import com.zainimtiaz.nagarro.dto.AccountStatementDto;
-import com.zainimtiaz.nagarro.entity.Account;
-import com.zainimtiaz.nagarro.exception.AccountNotFoundException;
-import com.zainimtiaz.nagarro.model.AccountForm;
-import com.zainimtiaz.nagarro.repository.AccountRepository;
 import com.zainimtiaz.nagarro.service.AccountService;
+import com.zainimtiaz.nagarro.service.CustomUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/account")
 @Slf4j
 public class AccountController {
-    private AccountRepository accountRepository;
-
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private AccountService accountService;
-
-    public AccountController(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @GetMapping("/statement/{accountId}")
     public ResponseEntity allData(@PathVariable("accountId") Long accountId) throws Exception {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDateTime toDate = LocalDateTime.now(),
-                fromDate = LocalDateTime.now().minusMonths(3);
-        log.info("accountId: " + accountId);
+        AccountStatementDto statement = accountService.getStatementById(accountId);
 
-        AccountStatementDto statement = accountService
-                .getStatement(accountId, toDate.format(formatter), fromDate.format(formatter), null, null);
-        return ok(statement);
+        Map result = new HashMap();
+        result.put("account", statement.getAccountDto());
+        result.put("statement", statement.getStatementDtos());
+        return ok(result);
+    }
+
+    private String getToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").split(" ")[1];
+        String username = jwtTokenProvider.getUsername(token);
+        return jwtTokenProvider.createToken(username, userDetailsService.getUserRoles(username));
     }
 
     @GetMapping("/statement/date/{accountId}/{dateFrom}/{dateTo}")
-    public ResponseEntity dateOnly(@PathParam("accountId") Long accountId,
-                                   @PathParam("dateFrom") String dateFrom,
-                                   @PathParam("dateTo") String dateTo) throws Exception {
-        AccountStatementDto statement = accountService
-                .getStatement(accountId, dateFrom, dateTo, null, null);
-        return ok(statement);
+    public ResponseEntity dateOnly(@PathVariable("accountId") Long accountId,
+                                   @PathVariable("dateFrom") String dateFrom,
+                                   @PathVariable("dateTo") String dateTo) throws Exception {
+        AccountStatementDto statement = accountService.getStatementByDate(accountId, dateFrom, dateTo);
+
+        Map result = new HashMap();
+        result.put("account", statement.getAccountDto());
+        result.put("statement", statement.getStatementDtos());
+        return ok(result);
     }
 
     @GetMapping("/statement/amount/{accountId}/{amountFrom}/{amountTo}")
-    public ResponseEntity amountOnly(@PathParam("accountId") Long accountId,
-                                     @PathParam("amountFrom") String amountFrom,
-                                     @PathParam("amountTo") String amountTo) throws Exception {
-        AccountStatementDto statement = accountService
-                .getStatement(accountId, null, null, amountFrom, amountTo);
+    public ResponseEntity amountOnly(@PathVariable("accountId") Long accountId,
+                                     @PathVariable("amountFrom") String amountFrom,
+                                     @PathVariable("amountTo") String amountTo) throws Exception {
+        AccountStatementDto statement = accountService.getStatementByAmount(accountId, amountFrom, amountTo);
         return ok(statement);
     }
 
     @GetMapping("/statement/all/{accountId}/{dateFrom}/{dateTo}/{amountFrom}/{amountTo}")
-    public ResponseEntity allParams(@PathParam("accountId") Long accountId,
-                                    @PathParam("dateFrom") String dateFrom,
-                                    @PathParam("dateTo") String dateTo,
-                                    @PathParam("amountFrom") String amountFrom,
-                                    @PathParam("amountTo") String amountTo) throws Exception {
+    public ResponseEntity allParams(@PathVariable("accountId") Long accountId,
+                                    @PathVariable("dateFrom") String dateFrom,
+                                    @PathVariable("dateTo") String dateTo,
+                                    @PathVariable("amountFrom") String amountFrom,
+                                    @PathVariable("amountTo") String amountTo) throws Exception {
         AccountStatementDto statement = accountService
-                .getStatement(accountId, dateFrom, dateTo, amountFrom, amountTo);
-        return ok(statement);
-    }
+                .getStatementByDateAndAmount(accountId, dateFrom, dateTo, amountFrom, amountTo);
 
-    @PostMapping("")
-    public ResponseEntity save(@RequestBody AccountForm form, HttpServletRequest request) {
-        Account account = this.accountRepository.save(Account.builder().accountNumber(form.getAccountNumber()).build());
-        return created(
-                ServletUriComponentsBuilder
-                        .fromContextPath(request)
-                        .path("/v1/vehicles/{id}")
-                        .buildAndExpand(account.getId())
-                        .toUri())
-                .build();
+        Map result = new HashMap();
+        result.put("account", statement.getAccountDto());
+        result.put("statement", statement.getStatementDtos());
+        return ok(result);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity get(@PathVariable("id") Long id) throws AccountNotFoundException {
-        return ok(this.accountRepository.findById(id).orElseThrow(() -> new AccountNotFoundException()));
-    }
-
 }

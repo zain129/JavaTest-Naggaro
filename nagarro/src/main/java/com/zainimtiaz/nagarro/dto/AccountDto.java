@@ -18,4 +18,11 @@ public class AccountDto {
     private Long accountId;
     private String accountType;
     private String accountNumber;
+
+    @Override
+    public String toString() {
+        return "{ \"accountId:\" \"" + accountId + "\"" +
+                ", \"accountType:\" \"" + accountType + "\"" +
+                ", \"accountNumber:\" \"" + accountNumber + "\" }";
+    }
 }

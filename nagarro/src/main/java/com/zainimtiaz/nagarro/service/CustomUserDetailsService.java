@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
     private UserMockRepository users;
@@ -27,5 +29,9 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Username: " + username + " not found");
         }
         return user;
+    }
+
+    public List<String> getUserRoles(String username){
+        return users.findByUsername(username).getRoles();
     }
 }

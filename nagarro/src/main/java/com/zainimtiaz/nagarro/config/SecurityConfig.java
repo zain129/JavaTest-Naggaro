@@ -7,6 +7,7 @@ package com.zainimtiaz.nagarro.config;
 
 import com.zainimtiaz.nagarro.config.jwt.JwtConfigurer;
 import com.zainimtiaz.nagarro.config.jwt.JwtTokenProvider;
+import com.zainimtiaz.nagarro.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    CustomUserDetailsService userDetails;
 
     @Bean
     @Override
@@ -39,6 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/expired").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/logout").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/auth/logout").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/auth/thisUser").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/statement/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/statement/date/**").hasRole("ADMIN")
@@ -50,8 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .apply(new JwtConfigurer(jwtTokenProvider));
 
         httpSecurity
+                .userDetailsService(userDetails)
                 .sessionManagement()
-                .maximumSessions(1).sessionRegistry(sessionRegistry());
+                .maximumSessions(1)
+                .expiredUrl("/auth/expired")
+                .maxSessionsPreventsLogin(true)
+                .sessionRegistry(sessionRegistry());
     }
 
     @Override

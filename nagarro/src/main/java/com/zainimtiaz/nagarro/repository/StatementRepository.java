@@ -14,5 +14,5 @@ import java.util.List;
 
 @RepositoryRestResource(path = "statements", collectionResourceRel = "statements", itemResourceRel = "statement")
 public interface StatementRepository extends JpaRepository<Statement, Long> {
-    List<Statement> findByAccount(Account account);
+    List<Statement> findByAccountId(Long accountId);
 }

@@ -32,6 +32,6 @@ public class Account implements Serializable {
     @Column(name = "account_number")
     private String accountNumber;
 
-    @OneToMany(mappedBy = "account")
-    private List<Statement> statement;
+//    @OneToMany(mappedBy = "account")
+//    private List<Statement> statement;
 }

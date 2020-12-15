@@ -21,4 +21,11 @@ public class StatementDto {
     private Long id;
     private Date dateField; //dd.MM.yyyy
     private BigDecimal amount;
+
+    @Override
+    public String toString() {
+        return "{ \"statementId:\" \"" + id + "\"" +
+                ", \"dateField:\" \"" + dateField + "\"" +
+                ", \"amount:\" \"" + amount + "\" }";
+    }
 }

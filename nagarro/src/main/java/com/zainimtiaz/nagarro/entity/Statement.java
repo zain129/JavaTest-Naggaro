@@ -24,12 +24,18 @@ public class Statement implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
-    private Account account;
+//    @ManyToOne
+//    @JoinColumn(name = "accountId", referencedColumnName = "id", nullable = false)
+//    private Account account;
+
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic
+    @Column(name = "account_id")
+    private Long accountId;
 
     @Basic
-    @Column(name = "date_field")
+    @Column(name = "datefield")
     private String dateField; //dd.MM.yyyy
 
     @Basic

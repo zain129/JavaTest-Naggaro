@@ -6,33 +6,48 @@
 package com.zainimtiaz.nagarro.service;
 
 import com.zainimtiaz.nagarro.dto.AccountStatementDto;
-import com.zainimtiaz.nagarro.dto.StatementDto;
-
-import java.util.List;
 
 public interface AccountService {
+    /**
+     * This method returns the statement of an account by Id only.
+     * // If the request does not specify any parameter
+     * // then the search will return three months back statement.
+     *
+     * @param accountId Required
+     * @return
+     */
+    AccountStatementDto getStatementById(Long accountId) throws Exception;
+
+    /**
+     * This method returns the statement of an account in specified date range.
+     *
+     * @param accountId
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
+    AccountStatementDto getStatementByDate(Long accountId, String fromDate, String toDate) throws Exception;
+
+    /**
+     * This method returns the statement of an account in specified amount range.
+     *
+     * @param accountId
+     * @param fromAmount
+     * @param toAmount
+     * @return
+     */
+    AccountStatementDto getStatementByAmount(Long accountId, String fromAmount, String toAmount) throws Exception;
 
     /**
      * This method returns the statement of an account.
      *
-     * @param accountId  Required
-     * @param fromDate   Optional
-     * @param toDate     Optional
-     * @param fromAmount Optional
-     * @param toAmount   Optional
+     * @param accountId
+     * @param fromDate
+     * @param toDate
+     * @param fromAmount
+     * @param toAmount
      * @return
      */
-    AccountStatementDto getStatement(Long accountId, String fromDate, String toDate, String fromAmount, String toAmount)
-            throws Exception;
-
-    /**
-     *
-     *
-     *
-     * - If the request does not specify any parameter then the search will return three months
-     * back statement.
-     * - If the parameters are invalid a proper error message should be sent to user.
-     * - The account number should be hashed before sent to the user.
-     * - All the exceptions should be handled on the server properly
-     */
+    AccountStatementDto getStatementByDateAndAmount
+    (Long accountId, String fromDate, String toDate, String fromAmount, String toAmount) throws Exception;
 }
