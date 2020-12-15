@@ -6,8 +6,8 @@ Zain Imtiaz (zain.imtiaz93@gmail.com)
 Dec 16, 2020
 
 # User Credentials
-testadmin\adminpassword
-testUser\userpassword
+- testadmin\adminpassword
+- testUser\userpassword
 
 # Login
 curl -X POST http://localhost:8080/auth/login -H "Content-Type:application/json" -d "{\"username\":\"testadmin\", \"password\":\"adminpassword\"}"
