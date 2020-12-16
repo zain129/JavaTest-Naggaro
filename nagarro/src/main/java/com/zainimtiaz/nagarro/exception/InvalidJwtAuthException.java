@@ -5,9 +5,9 @@
 
 package com.zainimtiaz.nagarro.exception;
 
-import org.springframework.security.core.AuthenticationException;
+import io.jsonwebtoken.JwtException;
 
-public class InvalidJwtAuthException extends AuthenticationException {
+public class InvalidJwtAuthException extends JwtException {
     private static final long serialVersionUID = -1L;
 
     public InvalidJwtAuthException(String e) {

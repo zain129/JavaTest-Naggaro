@@ -3,7 +3,7 @@
  * created on 14/12/2020
  **/
 
-package com.zainimtiaz.nagarro.dto;
+package com.zainimtiaz.nagarro.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -5,7 +5,7 @@
 
 package com.zainimtiaz.nagarro.config;
 
-import com.zainimtiaz.nagarro.model.ActiveUserList;
+import com.zainimtiaz.nagarro.entity.model.ActiveUserList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

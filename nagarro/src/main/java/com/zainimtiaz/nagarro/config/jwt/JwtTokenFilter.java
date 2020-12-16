@@ -4,7 +4,11 @@
 
 package com.zainimtiaz.nagarro.config.jwt;
 
+import com.zainimtiaz.nagarro.entity.model.ActiveUserList;
+import com.zainimtiaz.nagarro.exception.InvalidJwtAuthException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -18,6 +22,9 @@ import java.io.IOException;
 
 @Slf4j
 public class JwtTokenFilter extends GenericFilterBean {
+    @Autowired
+    private ActiveUserList activeUserList;
+
     private JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
@@ -26,7 +33,7 @@ public class JwtTokenFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-            throws IOException, ServletException {
+            throws IOException, ServletException, ExpiredJwtException, InvalidJwtAuthException {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
         if (token != null && jwtTokenProvider.validateToken(token)) {
             Authentication auth = jwtTokenProvider.getAuthentication(token);

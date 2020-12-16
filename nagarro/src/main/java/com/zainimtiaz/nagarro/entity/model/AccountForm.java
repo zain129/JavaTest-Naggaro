@@ -2,7 +2,7 @@
  * @author Zain I.
  **/
 
-package com.zainimtiaz.nagarro.model;
+package com.zainimtiaz.nagarro.entity.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

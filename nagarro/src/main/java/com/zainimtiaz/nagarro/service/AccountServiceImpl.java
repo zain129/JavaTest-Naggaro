@@ -5,9 +5,9 @@
 
 package com.zainimtiaz.nagarro.service;
 
-import com.zainimtiaz.nagarro.dto.AccountDto;
-import com.zainimtiaz.nagarro.dto.AccountStatementDto;
-import com.zainimtiaz.nagarro.dto.StatementDto;
+import com.zainimtiaz.nagarro.entity.dto.AccountDto;
+import com.zainimtiaz.nagarro.entity.dto.AccountStatementDto;
+import com.zainimtiaz.nagarro.entity.dto.StatementDto;
 import com.zainimtiaz.nagarro.exception.AccountNumberMissingException;
 import com.zainimtiaz.nagarro.exception.InvalidAmountRangeException;
 import com.zainimtiaz.nagarro.exception.InvalidDateRangeException;

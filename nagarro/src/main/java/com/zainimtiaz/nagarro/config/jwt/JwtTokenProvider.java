@@ -17,10 +17,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -40,20 +40,30 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(jwtProperties.getSecretKey().getBytes());
     }
 
-    public String createToken(String username, List<String> roles) {
+    public Map createToken(String username, List<String> roles) {
+        Map<String, Object> tokenData = new HashMap<>();
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", roles);
 
-        return Jwts.builder()
+        Date now = new Date(), validity = new Date(System.currentTimeMillis() + jwtProperties.getValidityInMs());
+
+        String token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getValidityInMs()))
+                .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+
+        tokenData.put("claims", claims);
+        tokenData.put("issued", now);
+        tokenData.put("validity", validity);
+        tokenData.put("token", token);
+
+        return tokenData;
     }
 
-    public Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(String token) throws JwtException {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
@@ -68,16 +78,12 @@ public class JwtTokenProvider {
                 bearerToken.substring(7, bearerToken.length()) : null;
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            if (claims.getBody().getExpiration().before(new Date())) {
-                return false;
-            }
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidJwtAuthException("Expired/Invalid JWT token");
+    public boolean validateToken(String token) throws ExpiredJwtException, InvalidJwtAuthException {
+        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+        if (claims.getBody().getExpiration().before(new Date())) {
+            return false;
         }
+        return true;
     }
 
     public String invalidateToken(String token) {

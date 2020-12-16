@@ -1,6 +1,6 @@
 package com.zainimtiaz.nagarro;
 
-import com.zainimtiaz.nagarro.model.ActiveUserList;
+import com.zainimtiaz.nagarro.entity.model.ActiveUserList;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

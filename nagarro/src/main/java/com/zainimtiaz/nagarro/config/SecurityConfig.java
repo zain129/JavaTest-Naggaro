@@ -7,6 +7,7 @@ package com.zainimtiaz.nagarro.config;
 
 import com.zainimtiaz.nagarro.config.jwt.JwtConfigurer;
 import com.zainimtiaz.nagarro.config.jwt.JwtTokenProvider;
+import com.zainimtiaz.nagarro.exception.ExceptionHandlerFilter;
 import com.zainimtiaz.nagarro.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -26,6 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     JwtTokenProvider jwtTokenProvider;
     @Autowired
     CustomUserDetailsService userDetails;
+    @Autowired
+    private ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
     @Override
@@ -36,9 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .httpBasic().disable()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .httpBasic()
+                .disable().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
@@ -55,15 +59,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/auth/403")
                 .and()
-                .apply(new JwtConfigurer(jwtTokenProvider));
-
-        httpSecurity
+                .apply(new JwtConfigurer(jwtTokenProvider))
+                .and()
                 .userDetailsService(userDetails)
                 .sessionManagement()
                 .maximumSessions(1)
-                .expiredUrl("/auth/expired")
                 .maxSessionsPreventsLogin(true)
+                .expiredUrl("/auth/expired")
                 .sessionRegistry(sessionRegistry());
+
+        httpSecurity.addFilterBefore(exceptionHandlerFilter, LogoutFilter.class);
     }
 
     @Override

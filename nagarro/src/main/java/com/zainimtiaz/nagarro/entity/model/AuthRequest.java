@@ -3,7 +3,7 @@
  * created on 13/12/2020
  **/
 
-package com.zainimtiaz.nagarro.model;
+package com.zainimtiaz.nagarro.entity.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

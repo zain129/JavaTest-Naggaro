@@ -5,7 +5,7 @@
 
 package com.zainimtiaz.nagarro.service;
 
-import com.zainimtiaz.nagarro.dto.AccountStatementDto;
+import com.zainimtiaz.nagarro.entity.dto.AccountStatementDto;
 
 public interface AccountService {
     /**
